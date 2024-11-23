@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<div style = "text-align:center;">
+<h2>Bienvenue dans notre jeu de placement de briques (type Lego™) !</h2>
+<p id="parag_description" style="background-color:pink;">
+	"Le but du jeu est de compléter une grille de cases cibles en utilisant des briques de tailles et couleurs variées. Recouvrez toutes les cases cibles pour gagner avec le moins de tours possible !"
+</p>
+</div>
+<div style = "text-align:center"><em><strong> Un peu de statistique avec notre joue : </strong></em></div> <br>
+
+<!--partie d`exercice 3.1<-->
+<div class="statistics-section">
+	<p> Statistiques de la Partie </p>
+	{% if REQUEST_VARS['nb_pieces'] > 0 %}
+	<li> Actuellement {{REQUEST_VARS['nb_pieces']}} pieces dans la base </li>
+	{% else %}
+	<li>Aucune piece dans la base.</li>
+	{% endif %}
+
+	{% if REQUEST_VARS['nb_jouers'] > 0 %}
+	<li> Actuellement {{REQUEST_VARS['nb_jouers']}} jouers dans la base </li>
+	{% else %}
+	<li>Aucune joueuse dans la base.</li>
+	{% endif %}
+
+	{% if REQUEST_VARS['nb_parties'] > 0 %}
+	<li> Actuellement {{REQUEST_VARS['nb_parties']}} parties dans la base </li>
+	{% else %}
+	<li>Aucune partie dans la base.</li>
+	{% endif %}
+</div><br>
+
+<!--partie d`exercice 3.2<-->
+
+
+<div>
+	<strong>Top-5 des couleurs ayant le plus de briques : </strong>
+	<ol>
+	    {%for couleur  in REQUEST_VARS['couleur']%}
+	    <li>
+			<span style="display: inline-block; width: 20px; height: 20px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);background-color: {{ couleur[0] }};"></span>
+			{%if loop.index == 1%}
+			<img src="/serial_critique/static/img/2.png" style="width: 20px; height: 20px;"/>  
+			{%endif%}	
+		</li> 
+	    {%endfor%}
+    </ol>
+</div>
+
+
+<!-- 3.3 score mi max<-->
+
+<div>
+	<strong>Pour chaque joueuse, son score minimal et son score maximal : </strong>
+	<table class="score">
+		<thead>
+			<tr >
+				<th>Joueuse</th>
+				<th style ="text-align: center;">Score Minimal</th>
+				<th style ="text-align: center;">Score Maximal</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for instance in REQUEST_VARS['score'] %}
+				<tr>
+					<td>{{ instance[0] }}</td>
+					<td class="min-score">{{ instance[1] }}</td>
+					<td class="max-score">{{ instance[2] }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>	
+</div>
+
+<!--  Parties avec le plus petit et plus grand nombre de pièces défaussées, de pièces piochées ex 3.4 <-->
+<div>
+	<strong>Parties avec le plus petit et plus grand nombre de pièces défaussées, de pièces piochées :</strong>
+	<p style="padding-left: 20px;">- <strong>Plus petit nombre de pièces défaussées:</strong> 
+	   Partie {{ REQUEST_VARS['placee'].lowest_d[0][0] }}, 
+	   Date debut :  {{ REQUEST_VARS['placee'].lowest_d[0][1] }}, 
+	   Date fin : {{ REQUEST_VARS['placee'].lowest_d[0][2] }}. </p>
+
+	<p style="padding-left: 20px;">- <strong>Plus grand nombre de pièces défaussées:</strong> 
+	   Partie {{ REQUEST_VARS['placee'].highest_d[0][0] }},
+	   Date debut : {{ REQUEST_VARS['placee'].highest_d[0][1] }},
+	   Date fin : {{ REQUEST_VARS['placee'].highest_d[0][2] }}. </p>
+
+	<p style="padding-left: 20px;">- <strong>Plus petit nombre de pièces piochées:</strong> 
+		Partie {{ REQUEST_VARS['placee'].lowest_pl[0][0] }},
+		Date debut : {{ REQUEST_VARS['placee'].lowest_pl[0][1] }}, 
+		Date fin : {{ REQUEST_VARS['placee'].lowest_pl[0][2] }}. </p>
+
+	<p style="padding-left: 20px;">- <strong>Plus grand nombre de pièces piochées:</strong> 
+		Partie {{ REQUEST_VARS['placee'].highest_pl[0][0] }},
+		Date debut : {{ REQUEST_VARS['placee'].highest_pl[0][1] }},  
+		Date fin : {{ REQUEST_VARS['placee'].highest_pl[0][2] }}. </p>
+
+</div>
+<!-- • Le nombre moyen de tours, pour chaque couple (mois, année) ex 3.5 <-->
+<div>
+<strong>Nombre moyen de tours (par mois et année) : </strong>
+	<table >
+		<thead>
+			<tr>
+				<th>Année</th>
+				<th>Mois</th>
+				<th>Moyenne de Tours</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for instance in REQUEST_VARS['avg_turns'] %}
+			<tr>
+				<td>{{ instance[0] }}</td>
+				<td>{{ instance[1] }}</td>
+				<td>{{ instance[2] }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div><br>
+
+<!-- • Top-3 des parties dans lesquelles les plus grandes pièces ex 3.6 <-->
+<div> <strong>Top-3 des parties avec les plus grandes pièces placées : </strong>
+	<table>
+		<thead>
+			<tr>
+				<th>Partie</th>
+				<th>Joueuse</th>
+				<th>Taille Max (longueur × largeur)</th>
+				<th>Nombre de Pièces</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in REQUEST_VARS['parties'] %}
+			<tr>
+				<td>{{ i[0] }}</td>
+				<td>{{ i[1] }}</td>
+				<td>{{ i[2] }}</td>
+				<td>{{ i[3] }}</td>
+				
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+</div>
+
+<!--  ex. 4 <-->
+<br>
+<div>
+	<form method="POST" style = "display: flex;">
+		{%for i in range(4)%}
+		<div1 style="background-color: {{SESSION['4_briques'][i][3]}}; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 160px; ">
+		    <input type = "submit" name = "brique" value = "{{SESSION['4_briques'][i][0]}}" style = "background-color: {{SESSION['4_briques'][i][3]}};"><br>
+			{%if SESSION['4_briques'][i][3] == '#000000'%}
+			<p style="color: aliceblue;">{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}</p>
+			{%else%}
+			<p>{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}</p>
+			{%endif%}
+		    </input>
+	    </div1>
+		{%endfor%}
+	</form>
+</div>
+
+
+
+{% include 'message.html' %}
+
+{% endblock %}
