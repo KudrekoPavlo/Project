@@ -103,6 +103,20 @@ hauteur float,
 couleur varchar(20)
 );
 
+CREATE TABLE brique (
+ PRIMARY KEY (Id_B),
+ Id_B      INTEGER NOT NULL,
+ Nom_B     VARCHAR(42),
+ Largeur   INTEGER,
+ Longeur   INTEGER,
+ Hauteur   INTEGER,
+ Forme     VARCHAR(42),
+ Couleur   VARCHAR(42),
+ Mots_cles VARCHAR(42),
+ Id_U      INTEGER NOT NULL,
+ Type_B    VARCHAR(42)
+);
+
 CREATE TABLE  joueuse (
 PRIMARY KEY (idj),
 idj serial not null,
@@ -1476,21 +1490,15 @@ INSERT INTO deroule VALUES(3, '2024-07-06 08:00:00.000', '2024-07-06 10:00:00.00
 INSERT INTO gagne VALUES(1,'2024-11-10 12:10:10.000','2024-11-10 13:10:10.000', 1, 25);
 
 
-CREATE TABLE piece_copie (
-    lp_c INTEGER,
-    larp_c INTEGER,
-    hp_c FLOAT,
-    cp_c VARCHAR(20)
-);
 
-COPY piece_copie (longeur, largeur, houteur, couleur)
-FROM '/serial_critique/static/tables type csv/pieces_pour_copie.csv'
-DELIMITER ','
-CSV HEADER;
 
-INSERT INTO piece (longueur, largeur, hauteur, couleur) 
-    SELECT CASE WHEN lp_c >= 0 THEN lp_c ELSE 1 END, 
-    CASE WHEN larp_c >= 0 THEN larp_c ELSE 1 END, 
-    CASE WHEN hp_c >= 0 THEN ROUND(hp_c,2)ELSE 1 END, 
-    CASE WHEN cp_c IN (SELECT DISTINCT(couleur) FROM piece) THEN cp_c ELSE NULL END
-FROM piece_copie
+
+
+INSERT INTO brique (Id_B, Longeur, Largeur,Hauteur, Couleur) 
+    SELECT
+    CASE WHEN id >= 0 THEN id ELSE NULL END,
+    CASE WHEN longueur >= 0 THEN longueur ELSE NULL END, 
+    CASE WHEN largeur >= 0 THEN largeur ELSE NULL END, 
+    CASE WHEN hauteur >= 0 THEN ROUND(hauteur,2)ELSE NULL END, 
+    couleur 
+FROM piece

@@ -126,10 +126,31 @@ td
     border: 1px solid black;
     text-align: center;
 }
-.div1 
-{
-    
-    border: 1px solid black; 
-    text-align: center; 
-    padding: 10px;
+
+.grid {
+    display: flex;
+    flex-direction: column; /* Organise les lignes en colonne */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style pour une ligne */
+.row {
+    display: flex;
+ }
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0; /* Couleur des cases normales */
+    border: 1px solid #ccc; /* Bordure légère */
+}
+
+/* Style pour une case cible */
+.cible {
+    background-color: #add8e6; /* Couleur spéciale pour les cases cibles */
+    background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), 
+                      linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
 }

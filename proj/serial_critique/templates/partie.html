@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+
+<!--  forme pour choisis le taille <-->
+{%if not SESSION.get('tailles')%}
+<h style = "margin: 120px; font-size: 20px;"><em>Pour commencer il faut choisis la taille de grille</em></h>
+<form method = "GET" name = "Taille_saisis">
+	<label for = "y" style = "font-size: 17px;">Houteur de la griille : <br></label>
+	<input type="number" id = "y" name = "y" placeholder="8 à 25" min="8" max="25" required>
+	<br><br>
+	<label for = "x" style = "font-size: 17px;">Longueur de la griille : <br></label>
+	<input type="number" id = "x" name = "x" placeholder="9 à 16" min="9" max="16" required>
+    <br><br>
+    <input type = "submit" name = "Dbj" value = "JOUE" style = "background-color: red;">
+	<br>
+</form>
+<br>
+{%endif%}
+
+<!--  message s`il y a une erreur <-->
+
+{%if REQUEST_VARS.get('tailles_e')%}
+<p>{{REQUEST_VARS.get('tailles_e')}}</p>
+{%endif%}
+
+<!--  affiche la grille <-->
+{%if SESSION.get('tailles')%}
+<div class="grid display: flex;">
+	{% for row in SESSION['grid'] %}
+		<div class="row">
+            {% for cell in row %}
+				{% if cell == 'x' %}
+					<div class="cell cible"></div>
+				{% else %}
+					<div class="cell"></div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% endfor %}	
+  </div>
+  <br>
+
+
+  <div class="grid display: flex;">
+	<form method="GET" style = "display: flex;">
+		{%for i in range(4)%}
+		<div1 style="background-color: {{SESSION['4_briques'][i][3]}}; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 160px; ">
+            {%if  not(SESSION['4_briques'][i][3] == '#ffffff')%}
+		        <button type="submit" name="brique" value="{{SESSION['4_briques'][i][0]}}" style="background-color: {{SESSION['4_briques'][i][3]}}; border: none; color: white;">
+                    {{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
+                </button>
+            {%else%}
+                <button type="submit" name="brique" value="{{SESSION['4_briques'][i][0]}}" style="background-color: {{SESSION['4_briques'][i][3]}}; border: none; color: black;">
+                    {{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
+                </button>
+            {%endif%}
+	    </div1>
+		{%endfor%}
+	</form>
+</div>
+</div>
+{%endif%}
+{% include 'message.html' %}
+
+{% endblock %}

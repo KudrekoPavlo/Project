@@ -186,3 +186,75 @@ def get_random_brique(connexion):
             logger.error(e)
     return None
     
+
+
+# Initialiser une grille avec uniquement des cases vides
+def init(longueur, hauteur):
+    grid = [[' ' for _ in range(longueur)] for _ in range(hauteur)]
+    return grid
+
+# Sélectionner aléatoirement une première case cible
+def premier_case_cible(grid, lg, ht):
+    i = random.randint(0, ht - 1)
+    j = random.randint(0, lg - 1)
+    grid[i][j] = 'x'
+    return i, j
+
+# Vérifier si une position est valide
+def valide(i, j, grid, lg, ht):
+    return 0 <= i < ht and 0 <= j < lg and grid[i][j] == ' '
+
+# Ajouter des cases cibles
+def ajouter_cases_cibles(grid, lg, ht, nb):
+    direct = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Directions pour explorer
+    cibles = []
+    
+    # Ajouter la première case cible aléatoire
+    i, j = premier_case_cible(grid, lg, ht)
+    cibles.append((i, j))
+
+    # Ajouter les autres cases cibles jusqu'à ce que nous ayons le nombre désiré
+    while len(cibles) < nb:
+        random.shuffle(direct)  # Mélanger les directions
+        ajout = False
+        for dx, dy in direct:
+            nx = i + dx
+            ny = j + dy
+            if valide(nx, ny, grid, lg, ht):
+                grid[nx][ny] = 'x'
+                cibles.append((nx, ny))
+                i, j = nx, ny
+                ajout = True
+                break
+        
+        # Si on ne peut pas ajouter de nouvelle case cible, sortir de la boucle
+        if not ajout:
+            print("Impossible d'ajouter une case cible à cause des contraintes de la grille.")
+            break
+    
+    return grid
+
+# Calculer le nombre de cibles (entre 10% et 20% du total des cases)
+def calculerNbCibles(lg, ht):
+    total_cases = lg * ht
+    minC = int(total_cases * 0.1)
+    maxC = int(total_cases * 0.2)
+    return random.randint(minC, maxC)
+
+# Générer une grille aléatoire avec des cases cibles
+def generer_grille(lg, ht):
+    # Vérifier si la taille de la grille est suffisante
+    if lg <= 1 or ht <= 1:
+        raise ValueError("La taille de la grille doit être supérieure à 1x1.")
+    
+    grid = init(lg, ht)  # Initialiser la grille
+    NbCibles = calculerNbCibles(lg, ht)  # Calculer le nombre de cibles à ajouter
+
+    # Vérifier si le nombre de cibles est plus grand que le nombre total de cases
+    if NbCibles > lg * ht:
+        raise ValueError(f"Impossible d'ajouter {NbCibles} cibles dans une grille de {lg}x{ht}.")
+    
+    # Ajouter les cibles à la grille
+    grid = ajouter_cases_cibles(grid, lg, ht, NbCibles)
+    
+    return grid

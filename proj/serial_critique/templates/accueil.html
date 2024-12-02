@@ -13,7 +13,7 @@
 <div class="statistics-section">
 	<p> Statistiques de la Partie </p>
 	{% if REQUEST_VARS['nb_pieces'] > 0 %}
-	<li> Actuellement {{REQUEST_VARS['nb_pieces']}} pieces dans la base </li>
+	<li> Actuellement {{REQUEST_VARS['nb_pieces']}} brique dans la base </li>
 	{% else %}
 	<li>Aucune piece dans la base.</li>
 	{% endif %}
@@ -146,26 +146,19 @@
 
 </div>
 
-<!--  ex. 4 <-->
 <br>
-<div>
-	<form method="POST" style = "display: flex;">
-		{%for i in range(4)%}
-		<div1 style="background-color: {{SESSION['4_briques'][i][3]}}; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 160px; ">
-		    <input type = "submit" name = "brique" value = "{{SESSION['4_briques'][i][0]}}" style = "background-color: {{SESSION['4_briques'][i][3]}};"><br>
-			{%if SESSION['4_briques'][i][3] == '#000000'%}
-			<p style="color: aliceblue;">{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}</p>
-			{%else%}
-			<p>{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}</p>
-			{%endif%}
-		    </input>
-	    </div1>
-		{%endfor%}
-	</form>
+
+
+<!--  ex. 4 <-->
+<div    style = " ">
+    <a href = "http://localhost:4242/partie">
+	    <div style="background-color: red; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 120px;"> 
+			<a href = "http://localhost:4242/partie">
+			    <p style = "color: white;"><strong>PLAY</strong></p>
+		    </a>
+	    </div>
+    
 </div>
-
-
-
 {% include 'message.html' %}
 
 {% endblock %}

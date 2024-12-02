@@ -1,7 +1,7 @@
-from model.model_pg import count_instances, top_colors, player_scores, parties_placee, avg_turn_month_year, top3_parties, get_random_brique
+from model.model_pg import count_instances, top_colors, player_scores, parties_placee, avg_turn_month_year, top3_parties, get_random_brique, generer_grille
 import random
 
-tab1 = count_instances(SESSION['CONNEXION'], 'piece')
+tab1 = count_instances(SESSION['CONNEXION'], 'briques')
 REQUEST_VARS ['nb_pieces'] = tab1[0][0]
 
 tab2 = count_instances(SESSION['CONNEXION'], 'joueuse')
@@ -27,6 +27,10 @@ REQUEST_VARS['rb'] = get_random_brique(SESSION['CONNEXION'])
 if '4_briques' not in SESSION:
     SESSION['4_briques'] = [get_random_brique(SESSION['CONNEXION']) for _ in range(4)]
 
+if 'grid' not in SESSION:
+    lg, ht = 9, 8
+    SESSION['grid'] = generer_grille(lg, ht)
+
 if 'brique' in POST:  # formulaire soumis
     select = POST['brique']
     if select:
@@ -37,3 +41,6 @@ if 'brique' in POST:  # formulaire soumis
             if brique[0] == idb:  
                 SESSION['4_briques'][i] = x
                 break                               
+
+
+

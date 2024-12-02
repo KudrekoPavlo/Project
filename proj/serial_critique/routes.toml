@@ -9,9 +9,9 @@ controleur = "controleurs/accueil.py"
 template = "accueil.html"
 
 [[routes]]
-url = "afficher"
-controleur = "controleurs/afficher.py"
-template = "afficher.html"
+url = "partie"
+controleur = "controleurs/partie.py"
+template = "partie.html"
 
 [[routes]]
 url = "rechercher"
