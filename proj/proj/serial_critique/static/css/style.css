@@ -1,0 +1,156 @@
+body {
+    background-color: #FFFFFF;
+}
+
+header,
+nav,
+main,
+footer {
+    padding: 1em 0;
+}
+
+header {
+    background-color: #FF9900;
+    text-align: center;
+    border-radius: 1em;
+}
+
+#div-central {
+    display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+    margin: auto;
+	box-sizing: border-box;
+	height: 100%;
+}
+
+nav {
+	flex : 2;
+    background-color: #b59ff7;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+	margin-left: 2em;
+    line-height: 2em;
+}
+
+nav > ul {
+	padding-left: 0.5em;
+}
+
+nav a {
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+nav a:visited {
+    color: #0000FF;
+    text-decoration: none;
+}
+
+main {
+	flex : 10;
+    background-color: #FFFFFF;
+    padding-left: 3em;
+}
+
+footer {
+	display: flex;
+	justify-content: space-around;
+    background-color: #669933;
+    border-radius: 1em;
+}
+
+.fond-jaune {
+	background-color: yellow;
+}
+
+.alert-error {
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0rem;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    color: rgb(0, 0, 0);
+    background-color: #ff00003d;
+    border-color: #ff0000;
+}
+
+.alert-success {
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0rem;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    color: rgb(0, 0, 0);
+    background-color: #48ff004e;
+    border-color: #00ff00;
+}
+
+.alert-warning {
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: rgb(0, 0, 0);
+    background-color: #ffda07c8;
+    border-color: #ffb300;
+}
+
+.score {
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid black;
+    text-align: left;
+}
+.min-score {
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.max-score {
+    color: #27ae60;
+    font-weight: bold;
+    text-align: center;
+}
+
+th
+{
+    border: 1px solid black;
+}
+tr
+{
+    border: 1px solid black;
+}
+td
+{
+    border: 1px solid black;
+    text-align: center;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column; /* Organise les lignes en colonne */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style pour une ligne */
+.row {
+    display: flex;
+ }
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0; /* Couleur des cases normales */
+    border: 1px solid #ccc; /* Bordure légère */
+}
+
+/* Style pour une case cible */
+.cible {
+    background-color: #add8e6; /* Couleur spéciale pour les cases cibles */
+    background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), 
+                      linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
+}

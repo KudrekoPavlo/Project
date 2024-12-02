@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import 'macro_instances.html' as macro_instances %}
+{% import 'macro_message.html' as macro_message %}
+
+{% block main_content %}
+<h2>Exécuter une requête SQL</h2>
+
+{% include 'form_sql.html' %}
+
+{% if REQUEST_VARS['message']  %}
+    {{ macro_message.print_message(REQUEST_VARS['message'], REQUEST_VARS['message_class']) }}
+{% endif %}
+
+{% if REQUEST_VARS.query_result and REQUEST_VARS.query_result.is_select_query %}
+<p>
+    {{ macro_instances.tab_instances(REQUEST_VARS['query_result'].result_attributes, REQUEST_VARS['query_result'].result_instances) }}
+</p>
+{% endif %}
+
+{% endblock %}
