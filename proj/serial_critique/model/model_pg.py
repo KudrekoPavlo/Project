@@ -258,3 +258,22 @@ def generer_grille(lg, ht):
     grid = ajouter_cases_cibles(grid, lg, ht, NbCibles)
     
     return grid
+
+
+
+def get_random_idB_Hard(connexion):
+    query = "SELECT id FROM piece"
+    return execute_select_query(connexion,query)
+
+
+def get_random_brique_hard(connexion):
+    with connexion.cursor() as cursor:
+        try:
+            Nbrs_id = get_random_idB_Hard(connexion)
+            random_idB = random.choice(Nbrs_id)[0]
+            cursor.execute(
+                "SELECT id, longueur, largeur, couleur FROM piece WHERE id = %s", (random_idB,))
+            return cursor.fetchone() 
+        except psycopg.Error as e:
+            logger.error(e)
+    return None
