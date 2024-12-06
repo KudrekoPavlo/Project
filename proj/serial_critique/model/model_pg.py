@@ -265,7 +265,7 @@ def get_random_idB_Hard(connexion):
     query = "SELECT id FROM piece"
     return execute_select_query(connexion,query)
 
-
+#fonction pour prendr des brique de la base sql, on en faut pour dificile mode de joue 
 def get_random_brique_hard(connexion):
     with connexion.cursor() as cursor:
         try:

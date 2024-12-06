@@ -3,7 +3,7 @@
 {% block main_content %}
 
 
-<!--  forme pour choisis le taille <-->
+<!--  forme pour choisir la dimention, mode de joue en nombre de tours si besoin<-->
 {%if not SESSION.get('tailles')%}
 <h style = "margin: 120px; font-size: 20px;"><em>Pour commencer il faut choisis la taille de grille</em></h>
 <form method = "GET" name = "Taille_saisis">
@@ -34,19 +34,32 @@
 <p>{{REQUEST_VARS.get('tailles_e')}}</p>
 {%endif%}
 
-<!--  affiche la grille <-->
+<!--  main de joue <-->
 {%if SESSION.get('tailles') and not SESSION['perdr']%}
 
+<!--  afficher le reste de tours <-->
 {%if 'brique' in GET and SESSION['max_tours'] >= 1%}
 <h class="grid display: flex;"> <strong>Il vous reste {{SESSION['max_tours'] - 1}} tours </strong></h>
 {%endif%}
 
+
 <div class="grid display: flex;">
+
+	<!--  afficher le grille de joue<-->
+	<div class="row">
+        <div class="cell"></div>
+        {% for x in range(SESSION['tailles'][0]) %}
+            <div class="cell" style="width: 50px; height: 50px; text-align: center;">{{ x }}</div>
+        {% endfor %}
+    </div>
 	{% for row in SESSION['grid'] %}
 		<div class="row">
+			<div class="cell" style="width: 50px; height: 50px; text-align: center;">{{ loop.index0 }}</div>
             {% for cell in row %}
 				{% if cell == 'x' %}
 					<div class="cell cible"></div>
+				{%elif cell['type'] =='y'%}
+					<div class = "cell" style ="background-color: {{cell['color']}};"></div>
 				{% else %}
 					<div class="cell"></div>
 				{% endif %}
@@ -56,39 +69,83 @@
   </div>
   <br>
 
+  	<!--  chois de brique <-->
+    <div class="grid display: flex;">
+		<form method="GET" style="display: flex; margin-bottom: 20px; flex-direction: column;">
+			
+			<!--  afficher le brique disponible a choisir<-->
+			<div style="display: flex; gap: 20px">
+				{%for i in range(4)%}
 
-  <div class="grid display: flex;">
-	<form method="GET" style = "display: flex;">
-		{%for i in range(4)%}
-		<div style="background-color: {{SESSION['4_briques'][i][3]}}; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 160px; ">
-            {%if  not(SESSION['4_briques'][i][3] == '#ffffff')%}
-		        <button type="submit" name="brique" value="{{SESSION['4_briques'][i][0]}}" style="background-color: {{SESSION['4_briques'][i][3]}}; border: none; color: white;">
-                    {{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
-                </button>
-            {%else%}
-                <button type="submit" name="brique" value="{{SESSION['4_briques'][i][0]}}" style="background-color: {{SESSION['4_briques'][i][3]}}; border: none; color: black;">
-                    {{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
-                </button>
-            {%endif%}
-	    </div>
-		{%endfor%}
-	</form>
+				<div style="background-color: {{SESSION['4_briques'][i][3]}}; border: 1px solid black; text-align: center; padding: 5px; border-radius: 5px; width: 120px;">
+					{%if  SESSION['4_briques'][i][3] == '#000000'%}
+					<label style = "color: white;">
+						<input type="radio" name="brique" value="{{SESSION['4_briques'][i][0]}}" required>
+						<br>{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
+					</label>
+					{%else%}
+					<label style = "color: black;">
+						<input type="radio" name="brique" value="{{SESSION['4_briques'][i][0]}}" required>
+						<br>{{SESSION['4_briques'][i][1]}} x {{SESSION['4_briques'][i][2]}}
+					</label>
+					{%endif%}
+				</div>
+
+				{%endfor%}
+			</div>
+
+			<!-- placee au coordonnees ou defausse<-->
+			<div style=" gap: 20px; justify-content: center; margin-top: 15px; margin-bottom: 15px;">
+
+				<label for="coord_x" >Coordonnee X:</label>
+				<input type="number" id="coord_x" name="coord_x" min="0" max="{{SESSION['tailles'][0] - 1}}" >
+
+				<label for="coord_y">Coordonnee Y:</label>
+				<input type="number" id="coord_y" name="coord_y" min="0" max="{{SESSION['tailles'][1] - 1}}" >
+
+				<button type="submit" name="action_br" value="placee" style="margin-top: 15px; margin-bottom: 15px; padding: 10px 20px;">Placer</button>
+				<button type="submit" name="action_br" value="defause" style="margin-top: 15px; margin-bottom: 15px; padding: 10px 20px;">Défausser</button>
+				
+			</div>
+
+		</form>
+
+		<!-- Botton Abandonner<-->
+		<form method="GET">
+			<button type="submit" name="Abandonner" value="1" style="background-color: white">
+				Abandonner
+			</button>
+		</form>	
+
+	</div>
 
 
+	<!--  afficher le nom d`errour<-->
+	{% if REQUEST_VARS.get('error') %}
+    <p style="color: red; font-weight: bold;">{{ REQUEST_VARS['error'] }}</p>
+    {% endif %}
 </div>
 {%endif%}
 
-<div>
-	{%if SESSION['perdr']%}
-        <div style = "background-color: red;"><p class = "color: white">Vous avez perdu</p></div>
-	        <form method="GET" style = "display: flex;"> 
-		        <button type="submit" name="NewGame" value="NewGame" style="background-color: red; border: black; color: white;">
-			        New game
-		        </button>
-	        </form>
-        </div>	
-    {%endif%}
+<!-- Scenario perdant <-->
+{%if SESSION['perdr'] == 'per' %}
+<div style="background-color: red; color: white; text-align: center; padding: 10px;">
+	<h1>VOUS AVEZ PERDU</h1>
+	<form method="GET">
+		<button type="submit" name="NewGame" value="NewGame" style="padding: 10px 20px;">START New game</button>
+	</form>
 </div>
+{%endif%}
+
+<!-- Scenario gagnant <-->
+{% if SESSION['perdr'] == 'gan' %}
+<div style="background-color: green; color: white; text-align: center; padding: 10px;">
+    <h1>Vous aves gagne avec le sore : {{SESSION['score'] - 1}}</h1>
+    <form method="GET">
+        <button type="submit" name="NewGame" value="NewGame" style="padding: 10px 20px;">START New game</button>
+    </form>
+</div>
+{% endif %}
 
 
 

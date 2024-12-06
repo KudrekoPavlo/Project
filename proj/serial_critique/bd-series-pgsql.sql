@@ -1492,7 +1492,7 @@ INSERT INTO gagne VALUES(1,'2024-11-10 12:10:10.000','2024-11-10 13:10:10.000', 
 
 
 
-
+/*Fonction pour incerer les donner dans notre bas d`une autre base des donnes*/
 
 INSERT INTO brique (Id_B, Longeur, Largeur,Hauteur, Couleur) 
     SELECT
