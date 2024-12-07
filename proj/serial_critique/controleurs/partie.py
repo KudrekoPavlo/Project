@@ -45,6 +45,7 @@ if 'bool_v' not in REQUEST_VARS:
 #initialisation de score
 if 'score' not in SESSION:
     SESSION['score'] = 1
+    SESSION['score'] = SESSION['score'] - 1
 
 #premiers quetre briques alleatoire
 if '4_briques' not in SESSION:
@@ -121,14 +122,12 @@ if SESSION['mode_jou'] == "izi":
                     except:
                         REQUEST_VARS['error'] = "Le brique n`a pas de bon taille, ou il est mal deplacee"
                 else:
-                    SESSION['max_tours'] -= 1  
-                    SESSION['score'] += 1
                     REQUEST_VARS['error'] = "Les coordonnees choisis ne sont pas bon pas bon"
             else:  
-                SESSION['max_tours'] -= 1  
-                SESSION['score'] += 1
                 REQUEST_VARS['error'] = "Il faut ecrire les coordonnee" 
         except (ValueError, IndexError, StopIteration):
+            SESSION['max_tours'] -= 1  
+            SESSION['score'] += 1
             REQUEST_VARS['error'] = "Le brique n`a pas de bon taille, ou il est mal deplacee"
 
 else :
@@ -212,6 +211,7 @@ if 1 == SESSION['max_tours'] :
 
 #Les actes en cas de perdre
 if 'NewGame' in GET:
+    SESSION['score'] = 0
     SESSION['4_briques'] = [get_random_brique(SESSION['CONNEXION']) for _ in range(4)]
     SESSION['max_tours'] = 0
     REQUEST_VARS['maxt_e'] = 0

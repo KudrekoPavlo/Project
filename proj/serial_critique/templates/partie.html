@@ -40,6 +40,7 @@
 <!--  afficher le reste de tours <-->
 {%if 'brique' in GET and SESSION['max_tours'] >= 1%}
 <h class="grid display: flex;"> <strong>Il vous reste {{SESSION['max_tours'] - 1}} tours </strong></h>
+{{SESSION['score']}}
 {%endif%}
 
 
